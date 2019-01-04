@@ -1,3 +1,98 @@
+output "instance_id" {
+  value       = "${aws_instance.default.id}"
+  description = "The instance ID."
+}
+
+output "instance_arn" {
+  value       = "${aws_instance.default.arn}"
+  description = "The ARN of the instance."
+}
+
+output "instance_availability_zone" {
+  value       = "${aws_instance.default.availability_zone}"
+  description = "The availability zone of the instance."
+}
+
+output "instance_placement_group" {
+  value       = "${aws_instance.default.placement_group}"
+  description = "The placement group of the instance."
+}
+
+output "instance_key_name" {
+  value       = "${aws_instance.default.key_name}"
+  description = "The key name of the instance."
+}
+
+output "instance_network_interface_id" {
+  value       = "${aws_instance.default.network_interface_id}"
+  description = "The ID of the network interface that was created with the instance."
+}
+
+output "instance_primary_network_interface_id" {
+  value       = "${aws_instance.default.primary_network_interface_id}"
+  description = "The ID of the instance's primary network interface."
+}
+
+output "instance_private_dns" {
+  value       = "${aws_instance.default.private_dns}"
+  description = "The private DNS name assigned to the instance."
+}
+
+output "instance_private_ip" {
+  value       = "${aws_instance.default.private_ip}"
+  description = "The private IP address assigned to the instance."
+}
+
+output "instance_security_groups" {
+  value       = "${aws_instance.default.security_groups}"
+  description = "The associated security groups."
+}
+
+output "instance_subnet_id" {
+  value       = "${aws_instance.default.subnet_id}"
+  description = "The VPC subnet ID."
+}
+
+output "security_group_id" {
+  value       = "${aws_security_group.default.id}"
+  description = "The ID of the security group."
+}
+
+output "security_group_arn" {
+  value       = "${aws_security_group.default.arn}"
+  description = "The ARN of the security group."
+}
+
+output "security_group_vpc_id" {
+  value       = "${aws_security_group.default.vpc_id}"
+  description = "The VPC ID of the security group."
+}
+
+output "security_group_owner_id" {
+  value       = "${aws_security_group.default.owner_id}"
+  description = "The owner ID of the security group."
+}
+
+output "security_group_name" {
+  value       = "${aws_security_group.default.name}"
+  description = "The name of the security group."
+}
+
+output "security_group_description" {
+  value       = "${aws_security_group.default.description}"
+  description = "The description of the security group."
+}
+
+output "security_group_ingress" {
+  value       = "${aws_security_group.default.ingress}"
+  description = "The ingress rules of the security group."
+}
+
+output "security_group_egress" {
+  value       = "${aws_security_group.default.egress}"
+  description = "The egress rules of the security group."
+}
+
 output "iam_instance_profile_id" {
   value       = "${aws_iam_instance_profile.default.id}"
   description = "The instance profile's ID."

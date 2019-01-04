@@ -3,6 +3,33 @@ variable "name" {
   description = "The name of the Session Manager."
 }
 
+variable "instance_type" {
+  type        = "string"
+  description = "The type of instance to start."
+}
+
+variable "subnet_id" {
+  type        = "string"
+  description = "The VPC Subnet ID to launch in."
+}
+
+variable "vpc_id" {
+  type        = "string"
+  description = "The VPC ID."
+}
+
+variable "ami" {
+  default     = ""
+  type        = "string"
+  description = "The AMI to use for the instance."
+}
+
+variable "vpc_security_group_ids" {
+  default     = []
+  type        = "list"
+  description = "A list of security group IDs to associate with."
+}
+
 variable "iam_policy" {
   default     = ""
   type        = "string"

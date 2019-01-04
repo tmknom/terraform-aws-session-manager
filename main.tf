@@ -2,6 +2,67 @@
 #
 # https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html
 
+# EC2 Instance
+#
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html
+
+# https://www.terraform.io/docs/providers/aws/r/instance.html
+resource "aws_instance" "default" {
+  ami                    = "${local.ami}"
+  instance_type          = "${var.instance_type}"
+  subnet_id              = "${var.subnet_id}"
+  iam_instance_profile   = "${aws_iam_instance_profile.default.name}"
+  vpc_security_group_ids = ["${concat(list(aws_security_group.default.id), var.vpc_security_group_ids)}"]
+  tags                   = "${merge(map("Name", var.name), var.tags)}"
+}
+
+# https://www.terraform.io/docs/providers/aws/r/security_group.html
+resource "aws_security_group" "default" {
+  name        = "${local.security_group_name}"
+  vpc_id      = "${var.vpc_id}"
+  description = "${var.description}"
+  tags        = "${merge(map("Name", local.security_group_name), var.tags)}"
+}
+
+# https://www.terraform.io/docs/providers/aws/r/security_group_rule.html
+resource "aws_security_group_rule" "egress" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = "${aws_security_group.default.id}"
+}
+
+locals {
+  ami                 = "${var.ami == "" ? data.aws_ami.default.id : var.ami}"
+  security_group_name = "${var.name}-session-manager-ec2"
+}
+
+# https://www.terraform.io/docs/providers/aws/d/ami.html#attributes-reference
+data "aws_ami" "default" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  # Describe filters
+  # https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeImages.html
+  filter {
+    name   = "owner-alias"
+    values = ["amazon"]
+  }
+
+  # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-2.0.????????-x86_64-gp2"]
+  }
+
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
+}
+
 # Session Manager IAM Instance Profile
 #
 # https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-instance-profile.html
