@@ -2,6 +2,31 @@
 #
 # https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html
 
+# SSM Document
+#
+# https://docs.aws.amazon.com/systems-manager/latest/userguide/getting-started-configure-preferences-cli.html
+
+# https://www.terraform.io/docs/providers/aws/r/ssm_document.html
+resource "aws_ssm_document" "default" {
+  name            = "${var.ssm_document_name}"
+  document_type   = "Session"
+  document_format = "JSON"
+  content         = "${data.template_file.default.rendered}"
+  tags            = "${merge(map("Name", var.ssm_document_name), var.tags)}"
+}
+
+data "template_file" "default" {
+  template = "${file("${path.module}/content.json")}"
+
+  vars {
+    s3_bucket_name                = "${var.s3_bucket_name}"
+    s3_key_prefix                 = "${var.s3_key_prefix}"
+    s3_encryption_enabled         = "${var.s3_encryption_enabled}"
+    cloudwatch_log_group_name     = "${var.cloudwatch_log_group_name}"
+    cloudwatch_encryption_enabled = "${var.cloudwatch_encryption_enabled}"
+  }
+}
+
 # EC2 Instance
 #
 # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html

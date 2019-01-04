@@ -18,6 +18,42 @@ variable "vpc_id" {
   description = "The VPC ID."
 }
 
+variable "ssm_document_name" {
+  default     = "SSM-SessionManagerRunShell"
+  type        = "string"
+  description = "The name of the document."
+}
+
+variable "s3_bucket_name" {
+  default     = ""
+  type        = "string"
+  description = "The name of the bucket."
+}
+
+variable "s3_key_prefix" {
+  default     = ""
+  type        = "string"
+  description = "The prefix for the specified S3 bucket."
+}
+
+variable "s3_encryption_enabled" {
+  default     = "true"
+  type        = "string"
+  description = "Specify true to indicate that encryption for S3 Bucket enabled."
+}
+
+variable "cloudwatch_log_group_name" {
+  default     = ""
+  type        = "string"
+  description = "The name of the log group."
+}
+
+variable "cloudwatch_encryption_enabled" {
+  default     = "true"
+  type        = "string"
+  description = "Specify true to indicate that encryption for CloudWatch Logs enabled."
+}
+
 variable "ami" {
   default     = ""
   type        = "string"

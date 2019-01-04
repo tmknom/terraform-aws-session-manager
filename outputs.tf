@@ -1,3 +1,53 @@
+output "ssm_document_description" {
+  value       = "${aws_ssm_document.default.description}"
+  description = "The description of the document."
+}
+
+output "ssm_document_schema_version" {
+  value       = "${aws_ssm_document.default.schema_version}"
+  description = "The schema version of the document."
+}
+
+output "ssm_document_default_version" {
+  value       = "${aws_ssm_document.default.default_version}"
+  description = "The default version of the document."
+}
+
+output "ssm_document_hash" {
+  value       = "${aws_ssm_document.default.hash}"
+  description = "The sha1 or sha256 of the document content."
+}
+
+output "ssm_document_hash_type" {
+  value       = "${aws_ssm_document.default.hash_type}"
+  description = "The hashing algorithm used when hashing the content."
+}
+
+output "ssm_document_latest_version" {
+  value       = "${aws_ssm_document.default.latest_version}"
+  description = "The latest version of the document."
+}
+
+output "ssm_document_owner" {
+  value       = "${aws_ssm_document.default.owner}"
+  description = "The AWS user account of the person who created the document."
+}
+
+output "ssm_document_status" {
+  value       = "${aws_ssm_document.default.status}"
+  description = "The current status of the document."
+}
+
+output "ssm_document_parameter" {
+  value       = "${aws_ssm_document.default.parameter}"
+  description = "The parameters that are available to this document."
+}
+
+output "ssm_document_platform_types" {
+  value       = "${aws_ssm_document.default.platform_types}"
+  description = "A list of OS platforms compatible with this SSM document."
+}
+
 output "instance_id" {
   value       = "${aws_instance.default.id}"
   description = "The instance ID."
