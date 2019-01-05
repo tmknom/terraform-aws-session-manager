@@ -126,7 +126,6 @@ module "session_manager" {
 | security_group_name                   | The name of the security group.                                     |
 | security_group_owner_id               | The owner ID of the security group.                                 |
 | security_group_vpc_id                 | The VPC ID of the security group.                                   |
-| ssm_document_created_date             | The date the document was created.                                  |
 | ssm_document_default_version          | The default version of the document.                                |
 | ssm_document_description              | The description of the document.                                    |
 | ssm_document_hash                     | The sha1 or sha256 of the document content.                         |
