@@ -6,6 +6,17 @@
 
 Terraform module which creates Session Manager resources on AWS.
 
+## Description
+
+Provision [SSM Documents](https://docs.aws.amazon.com/systems-manager/latest/userguide/getting-started-configure-preferences-cli.html),
+[EC2 Instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html) and
+[Instance Profiles for Session Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-instance-profile.html).
+
+This module provides recommended settings:
+
+- No open inbound ports
+- Loggable session activity
+
 ## Usage
 
 ### Minimal
