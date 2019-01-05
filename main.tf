@@ -21,10 +21,18 @@ data "template_file" "default" {
   vars {
     s3_bucket_name                = "${var.s3_bucket_name}"
     s3_key_prefix                 = "${var.s3_key_prefix}"
-    s3_encryption_enabled         = "${var.s3_encryption_enabled}"
+    s3_encryption_enabled         = "${local.s3_encryption_enabled}"
     cloudwatch_log_group_name     = "${var.cloudwatch_log_group_name}"
-    cloudwatch_encryption_enabled = "${var.cloudwatch_encryption_enabled}"
+    cloudwatch_encryption_enabled = "${local.cloudwatch_encryption_enabled}"
   }
+}
+
+# NOTE: If you specified boolean such as true or false, then Terraform convert to numeric such as 0 or 1.
+#       On the other hand, JSON Booleans allows only true or false not but 0 or 1.
+#       Therefore, the numeric boolean value that used by JSON must be reconverted to pure boolean value.
+locals {
+  s3_encryption_enabled         = "${var.s3_encryption_enabled ? "true" : "false"}"
+  cloudwatch_encryption_enabled = "${var.cloudwatch_encryption_enabled ? "true" : "false"}"
 }
 
 # EC2 Instance
