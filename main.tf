@@ -122,7 +122,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 # https://www.terraform.io/docs/providers/aws/r/iam_policy.html
 resource "aws_iam_policy" "default" {
   name        = "${local.iam_name}"
-  policy      = "${data.aws_iam_policy.default.policy}"
+  policy      = "${local.iam_policy}"
   path        = "${var.iam_path}"
   description = "${var.description}"
 }
