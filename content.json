@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0",
+  "description": "Document to hold regional settings for Session Manager",
+  "sessionType": "Standard_Stream",
+  "inputs": {
+    "s3BucketName": "${s3_bucket_name}",
+    "s3KeyPrefix": "${s3_key_prefix}",
+    "s3EncryptionEnabled": ${s3_encryption_enabled},
+    "cloudWatchLogGroupName": "${cloudwatch_log_group_name}",
+    "cloudWatchEncryptionEnabled": ${cloudwatch_encryption_enabled}
+  }
+}
