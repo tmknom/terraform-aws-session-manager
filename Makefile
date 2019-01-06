@@ -8,6 +8,17 @@ TERRAFORM_VERSION := 0.11.11
 MINIMAL_DIR := ./examples/minimal
 COMPLETE_DIR := ./examples/complete
 
+define start_session_to_example
+	query='Reservations[0].Instances[0].InstanceId' && \
+	filters='Name=tag:Name,Values=example,Name=instance-state-name,Values=running' && \
+	document_name='SSM-SessionManagerRunShell-for-example' && \
+	target=$$(aws ec2 describe-instances --output text --query $${query} --filters $${filters}) && \
+	exec aws ssm start-session --target $${target} --document-name $${document_name}
+endef
+
+start-session: ## Start session to example
+	$(call start_session_to_example)
+
 terraform-plan-minimal: ## Run terraform plan examples/minimal
 	$(call terraform,${MINIMAL_DIR},init)
 	$(call terraform,${MINIMAL_DIR},plan) | tee -a /dev/stderr | docker run --rm -i tmknom/terraform-landscape
