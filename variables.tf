@@ -66,6 +66,12 @@ variable "vpc_security_group_ids" {
   description = "A list of security group IDs to associate with."
 }
 
+variable "user_data" {
+  default     = ""
+  type        = "string"
+  description = "The user data to provide when launching the instance."
+}
+
 variable "iam_policy" {
   default     = ""
   type        = "string"
