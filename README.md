@@ -23,7 +23,7 @@ This module provides recommended settings:
 
 ```hcl
 module "session_manager" {
-  source        = "git::https://github.com/tmknom/terraform-aws-session-manager.git?ref=tags/1.0.0"
+  source        = "git::https://github.com/tmknom/terraform-aws-session-manager.git?ref=tags/1.1.0"
   name          = "example"
   instance_type = "t2.micro"
   subnet_id     = "${var.subnet_id}"
@@ -35,7 +35,7 @@ module "session_manager" {
 
 ```hcl
 module "session_manager" {
-  source        = "git::https://github.com/tmknom/terraform-aws-session-manager.git?ref=tags/1.0.0"
+  source        = "git::https://github.com/tmknom/terraform-aws-session-manager.git?ref=tags/1.1.0"
   name          = "example"
   instance_type = "t2.micro"
   subnet_id     = "${var.subnet_id}"
