@@ -13,6 +13,7 @@ module "session_manager" {
   cloudwatch_encryption_enabled = "false"
   ami                           = "${data.aws_ami.default.id}"
   vpc_security_group_ids        = ["${aws_security_group.default.id}"]
+  user_data                     = "${file("${path.module}/user_data.sh")}"
   iam_policy                    = "${data.aws_iam_policy_document.default.json}"
   iam_path                      = "/service-role/"
   description                   = "This is example"
@@ -44,7 +45,7 @@ data "aws_ami" "default" {
 
   filter {
     name   = "name"
-    values = ["amzn-ami-hvm-????.??.?.????????-x86_64-gp2"]
+    values = ["amzn2-ami-hvm-2.0.????????-x86_64-gp2"]
   }
 
   filter {

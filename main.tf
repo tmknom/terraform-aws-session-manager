@@ -46,6 +46,7 @@ resource "aws_instance" "default" {
   subnet_id              = "${var.subnet_id}"
   iam_instance_profile   = "${aws_iam_instance_profile.default.name}"
   vpc_security_group_ids = ["${concat(list(aws_security_group.default.id), var.vpc_security_group_ids)}"]
+  user_data              = "${var.user_data}"
   tags                   = "${merge(map("Name", var.name), var.tags)}"
 }
 
