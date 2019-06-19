@@ -71,22 +71,36 @@ resource "aws_security_group_rule" "ingress" {
 data "aws_iam_policy_document" "default" {
   source_json = "${data.aws_iam_policy.default.policy}"
 
+  # A custom policy for S3 bucket access
+  # https://docs.aws.amazon.com/en_us/systems-manager/latest/userguide/setup-instance-profile.html#instance-profile-custom-s3-policy
   statement {
-    sid = "ExamplePolicyStatement"
+    sid = "S3BucketAccessForSessionManager"
 
     actions = [
-      "s3:ListAllMyBuckets",
-      "s3:GetBucketLocation",
+      "s3:PutObject",
     ]
 
     resources = [
-      "arn:aws:s3:::*",
+      "${aws_s3_bucket.default.arn}/*",
     ]
+  }
+
+  # A custom policy for CloudWatch Logs access
+  # https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/permissions-reference-cwl.html
+  statement {
+    sid = "CloudWatchLogsAccessForSessionManager"
+
+    actions = [
+      "logs:PutLogEvents",
+      "logs:CreateLogStream",
+    ]
+
+    resources = ["*"]
   }
 }
 
 data "aws_iam_policy" "default" {
-  arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 module "vpc" {
