@@ -58,10 +58,6 @@ output "instance_key_name" {
   value = "${module.session_manager.instance_key_name}"
 }
 
-output "instance_network_interface_id" {
-  value = "${module.session_manager.instance_network_interface_id}"
-}
-
 output "instance_primary_network_interface_id" {
   value = "${module.session_manager.instance_primary_network_interface_id}"
 }
