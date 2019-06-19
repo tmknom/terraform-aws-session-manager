@@ -73,11 +73,6 @@ output "instance_key_name" {
   description = "The key name of the instance."
 }
 
-output "instance_network_interface_id" {
-  value       = "${aws_instance.default.network_interface_id}"
-  description = "The ID of the network interface that was created with the instance."
-}
-
 output "instance_primary_network_interface_id" {
   value       = "${aws_instance.default.primary_network_interface_id}"
   description = "The ID of the instance's primary network interface."
