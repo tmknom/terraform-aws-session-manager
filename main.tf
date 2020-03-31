@@ -8,22 +8,27 @@
 
 # https://www.terraform.io/docs/providers/aws/r/ssm_document.html
 resource "aws_ssm_document" "default" {
-  name            = "${var.ssm_document_name}"
+  name            = var.ssm_document_name
   document_type   = "Session"
   document_format = "JSON"
-  content         = "${data.template_file.default.rendered}"
-  tags            = "${merge(map("Name", var.ssm_document_name), var.tags)}"
+  content         = data.template_file.default.rendered
+  tags = merge(
+    {
+      "Name" = var.ssm_document_name
+    },
+    var.tags,
+  )
 }
 
 data "template_file" "default" {
-  template = "${file("${path.module}/content.json")}"
+  template = file("${path.module}/content.json")
 
-  vars {
-    s3_bucket_name                = "${var.s3_bucket_name}"
-    s3_key_prefix                 = "${var.s3_key_prefix}"
-    s3_encryption_enabled         = "${local.s3_encryption_enabled}"
-    cloudwatch_log_group_name     = "${var.cloudwatch_log_group_name}"
-    cloudwatch_encryption_enabled = "${local.cloudwatch_encryption_enabled}"
+  vars = {
+    s3_bucket_name                = var.s3_bucket_name
+    s3_key_prefix                 = var.s3_key_prefix
+    s3_encryption_enabled         = local.s3_encryption_enabled
+    cloudwatch_log_group_name     = var.cloudwatch_log_group_name
+    cloudwatch_encryption_enabled = local.cloudwatch_encryption_enabled
   }
 }
 
@@ -31,8 +36,8 @@ data "template_file" "default" {
 #       On the other hand, JSON Booleans allows only true or false not but 0 or 1.
 #       Therefore, the numeric boolean value that used by JSON must be reconverted to pure boolean value.
 locals {
-  s3_encryption_enabled         = "${var.s3_encryption_enabled ? "true" : "false"}"
-  cloudwatch_encryption_enabled = "${var.cloudwatch_encryption_enabled ? "true" : "false"}"
+  s3_encryption_enabled         = var.s3_encryption_enabled ? "true" : "false"
+  cloudwatch_encryption_enabled = var.cloudwatch_encryption_enabled ? "true" : "false"
 }
 
 # EC2 Instance
@@ -41,21 +46,32 @@ locals {
 
 # https://www.terraform.io/docs/providers/aws/r/instance.html
 resource "aws_instance" "default" {
-  ami                    = "${local.ami}"
-  instance_type          = "${var.instance_type}"
-  subnet_id              = "${var.subnet_id}"
-  iam_instance_profile   = "${aws_iam_instance_profile.default.name}"
-  vpc_security_group_ids = ["${concat(list(aws_security_group.default.id), var.vpc_security_group_ids)}"]
-  user_data              = "${var.user_data}"
-  tags                   = "${merge(map("Name", var.name), var.tags)}"
+  ami                    = local.ami
+  instance_type          = var.instance_type
+  subnet_id              = var.subnet_id
+  iam_instance_profile   = aws_iam_instance_profile.default.name
+  vpc_security_group_ids = flatten([aws_security_group.default.id, var.vpc_security_group_ids])
+
+  user_data = var.user_data
+  tags = merge(
+    {
+      "Name" = var.name
+    },
+    var.tags,
+  )
 }
 
 # https://www.terraform.io/docs/providers/aws/r/security_group.html
 resource "aws_security_group" "default" {
-  name        = "${local.security_group_name}"
-  vpc_id      = "${var.vpc_id}"
-  description = "${var.description}"
-  tags        = "${merge(map("Name", local.security_group_name), var.tags)}"
+  name        = local.security_group_name
+  vpc_id      = var.vpc_id
+  description = var.description
+  tags = merge(
+    {
+      "Name" = local.security_group_name
+    },
+    var.tags,
+  )
 }
 
 # https://www.terraform.io/docs/providers/aws/r/security_group_rule.html
@@ -65,11 +81,11 @@ resource "aws_security_group_rule" "egress" {
   to_port           = 0
   protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = "${aws_security_group.default.id}"
+  security_group_id = aws_security_group.default.id
 }
 
 locals {
-  ami                 = "${var.ami == "" ? data.aws_ami.default.id : var.ami}"
+  ami                 = var.ami == "" ? data.aws_ami.default.id : var.ami
   security_group_name = "${var.name}-session-manager-ec2"
 }
 
@@ -103,18 +119,23 @@ data "aws_ami" "default" {
 
 # https://www.terraform.io/docs/providers/aws/r/iam_instance_profile.html
 resource "aws_iam_instance_profile" "default" {
-  name = "${local.iam_name}"
-  role = "${aws_iam_role.default.name}"
-  path = "${var.iam_path}"
+  name = local.iam_name
+  role = aws_iam_role.default.name
+  path = var.iam_path
 }
 
 # https://www.terraform.io/docs/providers/aws/r/iam_role.html
 resource "aws_iam_role" "default" {
-  name               = "${local.iam_name}"
-  assume_role_policy = "${data.aws_iam_policy_document.assume_role_policy.json}"
-  path               = "${var.iam_path}"
-  description        = "${var.description}"
-  tags               = "${merge(map("Name", local.iam_name), var.tags)}"
+  name               = local.iam_name
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
+  path               = var.iam_path
+  description        = var.description
+  tags = merge(
+    {
+      "Name" = local.iam_name
+    },
+    var.tags,
+  )
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
@@ -130,23 +151,24 @@ data "aws_iam_policy_document" "assume_role_policy" {
 
 # https://www.terraform.io/docs/providers/aws/r/iam_policy.html
 resource "aws_iam_policy" "default" {
-  name        = "${local.iam_name}"
-  policy      = "${local.iam_policy}"
-  path        = "${var.iam_path}"
-  description = "${var.description}"
+  name        = local.iam_name
+  policy      = local.iam_policy
+  path        = var.iam_path
+  description = var.description
 }
 
 # https://www.terraform.io/docs/providers/aws/r/iam_role_policy_attachment.html
 resource "aws_iam_role_policy_attachment" "default" {
-  role       = "${aws_iam_role.default.name}"
-  policy_arn = "${aws_iam_policy.default.arn}"
+  role       = aws_iam_role.default.name
+  policy_arn = aws_iam_policy.default.arn
 }
 
 locals {
   iam_name   = "${var.name}-session-manager"
-  iam_policy = "${var.iam_policy == "" ? data.aws_iam_policy.default.policy : var.iam_policy}"
+  iam_policy = var.iam_policy == "" ? data.aws_iam_policy.default.policy : var.iam_policy
 }
 
 data "aws_iam_policy" "default" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
+
