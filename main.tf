@@ -13,11 +13,11 @@ resource "aws_ssm_document" "default" {
   document_format = "JSON"
   tags            = merge({ "Name" = var.ssm_document_name }, var.tags)
 
-  content         = jsonencode({
+  content = jsonencode({
     schemaVersion = "1.0"
     description   = "Document to hold regional settings for Session Manager"
     sessionType   = "Standard_Stream"
-    inputs        = {
+    inputs = {
       s3BucketName                = var.s3_bucket_name
       s3KeyPrefix                 = var.s3_key_prefix
       s3EncryptionEnabled         = var.s3_encryption_enabled
