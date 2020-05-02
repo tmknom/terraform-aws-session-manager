@@ -139,7 +139,7 @@ module "session_manager" {
 
 ## Development
 
-### Requirements
+### Development Requirements
 
 - [Docker](https://www.docker.com/)
 
