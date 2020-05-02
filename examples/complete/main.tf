@@ -8,9 +8,9 @@ module "session_manager" {
   ssm_document_name             = "SSM-SessionManagerRunShell-for-example"
   s3_bucket_name                = aws_s3_bucket.default.id
   s3_key_prefix                 = "prefix"
-  s3_encryption_enabled         = "false"
+  s3_encryption_enabled         = false
   cloudwatch_log_group_name     = aws_cloudwatch_log_group.default.name
-  cloudwatch_encryption_enabled = "false"
+  cloudwatch_encryption_enabled = false
   ami                           = data.aws_ami.default.id
   vpc_security_group_ids        = [aws_security_group.default.id]
   user_data                     = file("${path.module}/user_data.sh")
