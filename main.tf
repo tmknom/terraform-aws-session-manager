@@ -12,12 +12,7 @@ resource "aws_ssm_document" "default" {
   document_type   = "Session"
   document_format = "JSON"
   content         = data.template_file.default.rendered
-  tags = merge(
-    {
-      "Name" = var.ssm_document_name
-    },
-    var.tags,
-  )
+  tags            = merge({ "Name" = var.ssm_document_name }, var.tags)
 }
 
 data "template_file" "default" {
@@ -53,12 +48,7 @@ resource "aws_instance" "default" {
   vpc_security_group_ids = flatten([aws_security_group.default.id, var.vpc_security_group_ids])
 
   user_data = var.user_data
-  tags = merge(
-    {
-      "Name" = var.name
-    },
-    var.tags,
-  )
+  tags      = merge({ "Name" = var.name }, var.tags)
 }
 
 # https://www.terraform.io/docs/providers/aws/r/security_group.html
@@ -66,12 +56,7 @@ resource "aws_security_group" "default" {
   name        = local.security_group_name
   vpc_id      = var.vpc_id
   description = var.description
-  tags = merge(
-    {
-      "Name" = local.security_group_name
-    },
-    var.tags,
-  )
+  tags        = merge({ "Name" = local.security_group_name }, var.tags)
 }
 
 # https://www.terraform.io/docs/providers/aws/r/security_group_rule.html
@@ -130,12 +115,7 @@ resource "aws_iam_role" "default" {
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
   path               = var.iam_path
   description        = var.description
-  tags = merge(
-    {
-      "Name" = local.iam_name
-    },
-    var.tags,
-  )
+  tags               = merge({ "Name" = local.iam_name }, var.tags)
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
