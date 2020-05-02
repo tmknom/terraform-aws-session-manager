@@ -37,8 +37,8 @@ variable "s3_key_prefix" {
 }
 
 variable "s3_encryption_enabled" {
-  default     = "true"
-  type        = string
+  default     = true
+  type        = bool
   description = "Specify true to indicate that encryption for S3 Bucket enabled."
 }
 
@@ -49,8 +49,8 @@ variable "cloudwatch_log_group_name" {
 }
 
 variable "cloudwatch_encryption_enabled" {
-  default     = "true"
-  type        = string
+  default     = true
+  type        = bool
   description = "Specify true to indicate that encryption for CloudWatch Logs enabled."
 }
 
