@@ -2,7 +2,7 @@ module "session_manager" {
   source        = "../../"
   name          = "example"
   instance_type = "t2.micro"
-  subnet_id     = element(module.vpc.public_subnet_ids, 0)
+  subnet_id     = module.vpc.public_subnet_ids[0]
   vpc_id        = module.vpc.vpc_id
 
   ssm_document_name             = "SSM-SessionManagerRunShell-for-example"
