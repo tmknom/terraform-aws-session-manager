@@ -115,8 +115,6 @@ locals {
   cidr_block = "10.255.0.0/16"
 }
 
-data "aws_availability_zones" "available" {
-}
+data "aws_availability_zones" "available" {}
 
-data "aws_caller_identity" "current" {
-}
+data "aws_caller_identity" "current" {}
