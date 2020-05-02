@@ -181,4 +181,3 @@ output "iam_policy_path" {
 output "iam_policy_document" {
   value = module.session_manager.iam_policy_document
 }
-
