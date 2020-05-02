@@ -9,11 +9,11 @@ module "session_manager" {
 }
 
 module "vpc" {
-  source                    = "git::https://github.com/tmknom/terraform-aws-vpc.git?ref=tags/1.0.0"
+  source                    = "git::https://github.com/tmknom/terraform-aws-vpc.git?ref=tags/2.0.1"
   cidr_block                = local.cidr_block
   name                      = "session-manager"
   public_subnet_cidr_blocks = [cidrsubnet(local.cidr_block, 8, 0), cidrsubnet(local.cidr_block, 8, 1)]
-  public_availability_zones = [data.aws_availability_zones.available.names]
+  public_availability_zones = data.aws_availability_zones.available.names
 }
 
 locals {
