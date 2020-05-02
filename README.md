@@ -23,11 +23,11 @@ This module provides recommended settings:
 
 ```hcl
 module "session_manager" {
-  source        = "git::https://github.com/tmknom/terraform-aws-session-manager.git?ref=tags/1.2.0"
+  source        = "git::https://github.com/tmknom/terraform-aws-session-manager.git?ref=tags/2.0.0"
   name          = "example"
   instance_type = "t2.micro"
-  subnet_id     = "${var.subnet_id}"
-  vpc_id        = "${var.vpc_id}"
+  subnet_id     = var.subnet_id
+  vpc_id        = var.vpc_id
 }
 ```
 
@@ -35,21 +35,21 @@ module "session_manager" {
 
 ```hcl
 module "session_manager" {
-  source        = "git::https://github.com/tmknom/terraform-aws-session-manager.git?ref=tags/1.2.0"
+  source        = "git::https://github.com/tmknom/terraform-aws-session-manager.git?ref=tags/2.0.0"
   name          = "example"
   instance_type = "t2.micro"
-  subnet_id     = "${var.subnet_id}"
-  vpc_id        = "${var.vpc_id}"
+  subnet_id     = var.subnet_id
+  vpc_id        = var.vpc_id
 
   ssm_document_name             = "SSM-SessionManagerRunShell-for-example"
-  s3_bucket_name                = "${var.s3_bucket_name}"
+  s3_bucket_name                = var.s3_bucket_name
   s3_key_prefix                 = "prefix"
   s3_encryption_enabled         = false
-  cloudwatch_log_group_name     = "${var.cloudwatch_log_group_name}"
+  cloudwatch_log_group_name     = var.cloudwatch_log_group_name
   cloudwatch_encryption_enabled = false
-  ami                           = "${var.ami}"
-  vpc_security_group_ids        = ["${var.vpc_security_group_ids}"]
-  iam_policy                    = "${var.iam_policy}"
+  ami                           = var.ami
+  vpc_security_group_ids        = var.vpc_security_group_ids
+  iam_policy                    = var.iam_policy
   iam_path                      = "/service-role/"
   description                   = "This is example"
 
