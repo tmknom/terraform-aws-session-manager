@@ -227,4 +227,3 @@ output "iam_policy_document" {
   value       = aws_iam_policy.default.policy
   description = "The policy document of the IAM Policy."
 }
-

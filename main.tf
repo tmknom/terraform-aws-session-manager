@@ -171,4 +171,3 @@ locals {
 data "aws_iam_policy" "default" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
-
