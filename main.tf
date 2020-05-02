@@ -11,28 +11,20 @@ resource "aws_ssm_document" "default" {
   name            = var.ssm_document_name
   document_type   = "Session"
   document_format = "JSON"
-  content         = data.template_file.default.rendered
   tags            = merge({ "Name" = var.ssm_document_name }, var.tags)
-}
 
-data "template_file" "default" {
-  template = file("${path.module}/content.json")
-
-  vars = {
-    s3_bucket_name                = var.s3_bucket_name
-    s3_key_prefix                 = var.s3_key_prefix
-    s3_encryption_enabled         = local.s3_encryption_enabled
-    cloudwatch_log_group_name     = var.cloudwatch_log_group_name
-    cloudwatch_encryption_enabled = local.cloudwatch_encryption_enabled
-  }
-}
-
-# NOTE: If you specified boolean such as true or false, then Terraform convert to numeric such as 0 or 1.
-#       On the other hand, JSON Booleans allows only true or false not but 0 or 1.
-#       Therefore, the numeric boolean value that used by JSON must be reconverted to pure boolean value.
-locals {
-  s3_encryption_enabled         = var.s3_encryption_enabled ? "true" : "false"
-  cloudwatch_encryption_enabled = var.cloudwatch_encryption_enabled ? "true" : "false"
+  content         = jsonencode({
+    schemaVersion = "1.0"
+    description   = "Document to hold regional settings for Session Manager"
+    sessionType   = "Standard_Stream"
+    inputs        = {
+      s3BucketName                = var.s3_bucket_name
+      s3KeyPrefix                 = var.s3_key_prefix
+      s3EncryptionEnabled         = var.s3_encryption_enabled
+      cloudWatchLogGroupName      = var.cloudwatch_log_group_name
+      cloudWatchEncryptionEnabled = var.cloudwatch_encryption_enabled
+    }
+  })
 }
 
 # EC2 Instance
