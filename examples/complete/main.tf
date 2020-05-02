@@ -2,19 +2,19 @@ module "session_manager" {
   source        = "../../"
   name          = "example"
   instance_type = "t2.micro"
-  subnet_id     = "${element(module.vpc.public_subnet_ids, 0)}"
-  vpc_id        = "${module.vpc.vpc_id}"
+  subnet_id     = element(module.vpc.public_subnet_ids, 0)
+  vpc_id        = module.vpc.vpc_id
 
   ssm_document_name             = "SSM-SessionManagerRunShell-for-example"
-  s3_bucket_name                = "${aws_s3_bucket.default.id}"
+  s3_bucket_name                = aws_s3_bucket.default.id
   s3_key_prefix                 = "prefix"
   s3_encryption_enabled         = "false"
-  cloudwatch_log_group_name     = "${aws_cloudwatch_log_group.default.name}"
+  cloudwatch_log_group_name     = aws_cloudwatch_log_group.default.name
   cloudwatch_encryption_enabled = "false"
-  ami                           = "${data.aws_ami.default.id}"
-  vpc_security_group_ids        = ["${aws_security_group.default.id}"]
-  user_data                     = "${file("${path.module}/user_data.sh")}"
-  iam_policy                    = "${data.aws_iam_policy_document.default.json}"
+  ami                           = data.aws_ami.default.id
+  vpc_security_group_ids        = [aws_security_group.default.id]
+  user_data                     = file("${path.module}/user_data.sh")
+  iam_policy                    = data.aws_iam_policy_document.default.json
   iam_path                      = "/service-role/"
   description                   = "This is example"
 
@@ -56,7 +56,7 @@ data "aws_ami" "default" {
 
 resource "aws_security_group" "default" {
   name   = "session-manager"
-  vpc_id = "${module.vpc.vpc_id}"
+  vpc_id = module.vpc.vpc_id
 }
 
 resource "aws_security_group_rule" "ingress" {
@@ -65,11 +65,11 @@ resource "aws_security_group_rule" "ingress" {
   to_port           = 0
   protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = "${aws_security_group.default.id}"
+  security_group_id = aws_security_group.default.id
 }
 
 data "aws_iam_policy_document" "default" {
-  source_json = "${data.aws_iam_policy.default.policy}"
+  source_json = data.aws_iam_policy.default.policy
 
   # A custom policy for S3 bucket access
   # https://docs.aws.amazon.com/en_us/systems-manager/latest/userguide/setup-instance-profile.html#instance-profile-custom-s3-policy
@@ -105,16 +105,19 @@ data "aws_iam_policy" "default" {
 
 module "vpc" {
   source                    = "git::https://github.com/tmknom/terraform-aws-vpc.git?ref=tags/1.0.0"
-  cidr_block                = "${local.cidr_block}"
+  cidr_block                = local.cidr_block
   name                      = "session-manager"
-  public_subnet_cidr_blocks = ["${cidrsubnet(local.cidr_block, 8, 0)}", "${cidrsubnet(local.cidr_block, 8, 1)}"]
-  public_availability_zones = ["${data.aws_availability_zones.available.names}"]
+  public_subnet_cidr_blocks = [cidrsubnet(local.cidr_block, 8, 0), cidrsubnet(local.cidr_block, 8, 1)]
+  public_availability_zones = [data.aws_availability_zones.available.names]
 }
 
 locals {
   cidr_block = "10.255.0.0/16"
 }
 
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+}
 
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+}
+
