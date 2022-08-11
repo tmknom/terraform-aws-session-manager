@@ -62,32 +62,12 @@ resource "aws_security_group_rule" "egress" {
 }
 
 locals {
-  ami                 = var.ami == "" ? data.aws_ami.default.id : var.ami
+  ami                 = var.ami == "" ? data.aws_ssm_parameter.aws_ami_default.value : var.ami
   security_group_name = "${var.name}-session-manager-ec2"
 }
 
-# https://www.terraform.io/docs/providers/aws/d/ami.html#attributes-reference
-data "aws_ami" "default" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  # Describe filters
-  # https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeImages.html
-  filter {
-    name   = "owner-alias"
-    values = ["amazon"]
-  }
-
-  # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-2.0.????????-x86_64-gp2"]
-  }
-
-  filter {
-    name   = "state"
-    values = ["available"]
-  }
+data "aws_ssm_parameter" "aws_ami_default" {
+  name = "/aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-gp2"
 }
 
 # Session Manager IAM Instance Profile
