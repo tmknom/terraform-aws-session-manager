@@ -62,7 +62,7 @@ resource "aws_security_group_rule" "egress" {
 }
 
 locals {
-  ami                 = var.ami == "" ? data.aws_ssm_parameter.latest_amazon_ami.value : var.ami
+  ami                 = var.ami == "" ? data.aws_ssm_parameter.aws_ami_default.value : var.ami
   security_group_name = "${var.name}-session-manager-ec2"
 }
 
