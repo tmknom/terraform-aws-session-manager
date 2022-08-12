@@ -81,7 +81,7 @@ data "aws_ami" "default" {
   # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html
   filter {
     name   = "name"
-    values = ["amzn2-ami-hvm-2.0.????????-x86_64-gp2"]
+    values = ["amzn2-ami-hvm-2.0.*-x86_64-gp2"]
   }
 
   filter {
